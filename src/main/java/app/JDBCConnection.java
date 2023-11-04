@@ -973,6 +973,69 @@ public ArrayList<Education> getSchool(String LGAcode, String numSimilarLGAs, Str
         return table;
     }
     
+    public ArrayList<ageCount> FilterAgeCount(  String sortField , String indigenous_status , String lgaName , String order ) {
+        Connection connection = null;
+        ArrayList<ageCount> table = new ArrayList<ageCount>();
+    
+        try {
+            // Connect to the JDBC database
+            connection = DriverManager.getConnection(DATABASE);
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);
+            
+            System.out.println(lgaName);
+            System.out.println(sortField);
+            System.out.println(indigenous_status);
+            
+            String query = "Select \r\n" + //
+                    "    a.AgeRange as age,\r\n" + //
+                    "    SUM(a.count) as sumCount\r\n" + //
+                    "from agedemographics a\r\n" + //
+                    "INNER JOIN \r\n" + //
+                    "LGA l\r\n" + //
+                    "ON a.LGAcode = l.LGAcode\r\n" + //
+                    "Where \r\n" + //
+                    "l.name = '"+lgaName+"'\r\n" + //
+                    "AND a.Indigenous_Status = '"+indigenous_status+"'\r\n" + //
+                    "Group by a.AgeRange\r\n" + //
+                    "Order by l.name ";
+    
+            if (order != null && !order.isEmpty()) {
+                query += "ASC";
+                // query += "ORDER BY a.year";
+            } else {
+                query += order;
+            }
+    
+            ResultSet results = statement.executeQuery(query);
+    
+            while (results.next()) {
+                String age = results.getString("age");
+                String sumCount = results.getString("sumCount");
+                
+    
+                ageCount recent =  new ageCount(age, sumCount);
+                table.add(recent);
+            }
+    
+            System.out.println("Data retrieved successfully.");
+            System.out.println(table.size());
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            System.out.println("Error occurred.");
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+    
+        return table;
+    }
+    
     
 }
 

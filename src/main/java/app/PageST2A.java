@@ -38,7 +38,7 @@ public class PageST2A implements Handler {
 
     // Create JDBC Connection
     JDBCConnection jdbc = new JDBCConnection();
-    DBConnection DB =  new DBConnection();
+    // DBConnection DB =  new DBConnection();
     // Retrieve the combined data
     ArrayList < Map < String, Object >> combinedData = jdbc.retrieveCombinedData();
     System.out.println("Number of data rows retrieved: " + combinedData.size());
@@ -73,19 +73,20 @@ public class PageST2A implements Handler {
     html += "<form id='query-form' action='page2A.html' method='post' onsubmit='return validateForm();'>\r\n";//
     html += "<label for='ageFilter'>Select Age Range:</label>\r\n" + //
             "    <select name='ageFilter' id='ageFilter'>\r\n" + //
-            "        <option value='0-4 years'>0-4 years</option>\r\n" + //
-            "        <option value='5-9 years'>5-9 years</option>\r\n" + //
-            "        <option value='10-14 years'>10-14 years</option>\r\n" + //
-            "        <option value='15-19 years'>15-19 years</option>\r\n" + //
-            "        <option value='20-24 years'>20-24 years</option>\r\n" + //
-            "        <option value='25-29 years'>25-29 years</option>\r\n" + //
-            "        <option value='30-34 years'>30-34 years</option>\r\n" + //
-            "        <option value='35-39 years'>35-39 years</option>\r\n" + //
-            "        <option value='40-44 years'>40-44 years</option>\r\n" + //
-            "        <option value='45-49 years'>45-49 years</option>\r\n" + //
-            "        <option value='50-54 years'>50-54 years</option>\r\n" + //
-            "        <option value='55-59 years'>55-59 years</option>\r\n" + //
-            "        <option value='60-64 years'>60-64 years</option>\r\n" + //
+            "        <option value='Default' selected>Default</option>\r\n" + //
+            "        <option value='0_4'>0-4 years</option>\r\n" + //
+            "        <option value='5_9'>5-9 years</option>\r\n" + //
+            "        <option value='10_14'>10-14 years</option>\r\n" + //
+            "        <option value='15_19'>15-19 years</option>\r\n" + //
+            "        <option value='20_24'>20-24 years</option>\r\n" + //
+            "        <option value='25_29'>25-29 years</option>\r\n" + //
+            "        <option value='30_34'>30-34 years</option>\r\n" + //
+            "        <option value='35_39'>35-39 years</option>\r\n" + //
+            "        <option value='40_44'>40-44 years</option>\r\n" + //
+            "        <option value='45_49'>45-49 years</option>\r\n" + //
+            "        <option value='50_54'>50-54 years</option>\r\n" + //
+            "        <option value='55_59'>55-59 years</option>\r\n" + //
+            "        <option value='60_64'>60-64 years</option>\r\n" + //
             "        <option value='65+'>65+</option>\r\n" + //
             "    </select>\r\n" + //
             "    <br><br>\r\n" + //
@@ -93,16 +94,40 @@ public class PageST2A implements Handler {
 
     html += " <!-- Health Condition Filter -->\r\n" + //
             "    <label for='health_condition'>Health Condition:</label>\r\n" + //
-            "    <input type='text' name='health_condition' id='health_condition'>\r\n" + //
-            "    <br><br> ";
+            "    <select name='health_condition' id='health_condition'>\r\n"; //
+    html += "    <option value='Default' selected>Default</option>\r\n" + //
+            "    <option value='arthritis'>Arthritis</option>\r\n" + //
+            "    <option value='arthritis_non'>Arthritis (Non-Indigenous)</option>\r\n" + //
+            "    <option value='asthma'>Asthma</option>\r\n" + //
+            "    <option value='asthma_non'>Asthma (Non-Indigenous)</option>\r\n" + //
+            "    <option value='cancer'>Cancer</option>\r\n" + //
+            "    <option value='cancer_non'>Cancer (Non-Indigenous)</option>\r\n" + //
+            "    <option value='dementia'>Dementia</option>\r\n" + //
+            "    <option value='dementia_non'>Dementia (Non-Indigenous)</option>\r\n" + //
+            "    <option value='diabetes'>Diabetes</option>\r\n" + //
+            "    <option value='diabetes_non'>Diabetes (Non-Indigenous)</option>\r\n" + //
+            "    <option value='heartdisease'>Heart Disease</option>\r\n" + //
+            "    <option value='heartdisease_non'>Heart Disease (Non-Indigenous)</option>\r\n" + //
+            "    <option value='kidneydisease'>Kidney Disease</option>\r\n" + //
+            "    <option value='kidneydisease_non'>Kidney Disease (Non-Indigenous)</option>\r\n" + //
+            "    <option value='lungcondition'>Lung Condition</option>\r\n" + //
+            "    <option value='lungcondition_non'>Lung Condition (Non-Indigenous)</option>\r\n" + //
+            "    <option value='mentalhealth'>Mental Health</option>\r\n" + //
+            "    <option value='mentalhealth_non'>Mental Health (Non-Indigenous)</option>\r\n" + //
+            "    <option value='stroke'>Stroke</option>\r\n" + //
+            "    <option value='stroke_non'>Stroke (Non-Indigenous)</option>\r\n" + //
+            "    <option value='other'>Other</option>\r\n" + //
+            "    <option value='other_non'>Other (Non-Indigenous)</option>" + 
+            "    </select>\r\n";        
+    html +=        "    <br><br> ";
 
-    html += " <!-- Gender Filter -->\r\n" + //
-            "    <label for='genderFilter'>Select Gender:</label>\r\n" + //
-            "    <select name='genderFilter' id='genderFilter'>\r\n" + //
-            "        <option value='male'>Male</option>\r\n" + //
-            "        <option value='female'>Female</option>\r\n" + //
-            "    </select>\r\n" + //
-            "    <br><br>";
+    // html += " <!-- Gender Filter -->\r\n" + //
+    //         "    <label for='genderFilter'>Select Gender:</label>\r\n" + //
+    //         "    <select name='genderFilter' id='genderFilter'>\r\n" + //
+    //         "        <option value='male'>Male</option>\r\n" + //
+    //         "        <option value='female'>Female</option>\r\n" + //
+    //         "    </select>\r\n" + //
+    //         "    <br><br>";
     
     html += " <!-- Sort Field -->\r\n" + //
             "    <label for='sortField'>Sort By:</label>\r\n" + //
@@ -112,19 +137,23 @@ public class PageST2A implements Handler {
             "    </select>\r\n" + //
             "    <br><br>";
 
-    html += "<!-- Year Data -->\r\n" + //
-            "    <label for='year'>Select Year:</label>\r\n" + //
-            "    <select name='year' id='year'>\r\n" + //
-            "        <option value='2016'>2016</option>\r\n" + //
-            "        <option value='2021'>2021</option>\r\n" + //
+    html += "<!-- Lga Name -->\r\n" + //
+            "    <label for='LgaName'>Enter LGA Name:</label>\r\n" + //
+            "  <input type='text' name = 'LgaName'>"+
+            "    <br><br>";
+    html += " <!-- Order By -->\r\n" + //
+            "    <label for='order'>Order:</label>\r\n" + //
+            "    <select name='order'>\r\n" + //
+            "        <option value='ASC'>Ascending </option>\r\n" + //
+            "        <option value='DESC'>Descending </option>\r\n" + //
             "    </select>\r\n" + //
             "    <br><br>";
-
     html += " <!-- Indigenous Status -->\r\n" + //
             "    <label for='indigenous_status'>Indigenous Status:</label>\r\n" + //
             "    <select name='indigenous_status' id='indigenous_status'>\r\n" + //
-            "        <option value='indigenous'>Indigenous</option>\r\n" + //
-            "        <option value='non-indigenous'>Non-Indigenous</option>\r\n" + //
+            "        <option value='Indigenous'>Indigenous</option>\r\n" + //
+            "        <option value='NonIndigenous'>Non-Indigenous</option>\r\n" + //
+            "        <option value='NotStated'>Not stated</option>\r\n" + //
             "    </select>\r\n" + //
             "    <br><br>";
 
@@ -134,12 +163,9 @@ public class PageST2A implements Handler {
             "function validateForm() {\r\n" + //
             "    var ageFilter = document.getElementById('ageFilter').value;\r\n" + //
             "    var healthCondition = document.getElementById('health_condition').value;\r\n" + //
-            "    var genderFilter = document.getElementById('genderFilter').value;\r\n" + //
             "\r\n" + //
-            "    // Add your validation logic here\r\n" + //
-            "    // For example, check if the ageFilter, healthCondition, and genderFilter are not empty\r\n" + //
             "\r\n" + //
-            "    if (ageFilter === '' || healthCondition === '' || genderFilter === '') {\r\n" + //
+            "    if (ageFilter === '' || healthCondition === '') {\r\n" + //
             "        alert('Please fill out all required fields.');\r\n" + //
             "        return false; // Prevent the form from submitting\r\n" + //
             "    }\r\n" + //
@@ -151,26 +177,25 @@ public class PageST2A implements Handler {
     // Close Content div
     html = html + "</div>";
     html += "<div>";
-    if (context.formParam("ageFilter") != null && context.formParams("indigenous_status") != null) {
-        String age = context.formParam("ageFilter");
+    // && context.formParam("health_condition") == "Default"
+    if (context.formParam("LgaName") != null && context.formParams("indigenous_status") != null ) {
+        // String age = context.formParam("ageFilter");
         // List<String> gender = context.formParams("genderFilter");
-        String gender = context.formParam("genderFilter");
+     
         String indigenous_status = context.formParam("indigenous_status");
-        String year = context.formParam("year");
-        String health_condition = context.formParam("health_condition");
+        String order = context.formParam("order");
+        String lgaName = context.formParam("LgaName");
         String sortField = context.formParam("sortField");
-        // ArrayList<Education> filteredData = jdbc.getFilteredData(age, gender);
-        ArrayList<Data2A> filteredData = DB.FilteredData(age , health_condition , gender, sortField , year , indigenous_status );
+        
+        ArrayList<ageCount> filteredData = jdbc.FilterAgeCount(sortField, indigenous_status , lgaName , order );
+        
         if(filteredData.size() > 0){
             html += "<table>";
         // Create table headers
-        html += "<tr><th>Year</th><th>Year</th><th>Age Group</th><th>HealthCondition</th><th>Indigenous Status</th>" +
-        "<th>Total HealthC ondition Count</th><th>Total Age Demographics Count</th><th>Sex</th></tr>";
-        for (Data2A dt : filteredData) {
+        html += "<tr><th>Year</th><th>Age Range</th><th>Sum</th>" +"</tr>";
+        for (ageCount at : filteredData) {
             // Add data to the table
-            html += "<tr><td>" + dt.getYear() + "</td><td>" + dt.getAgeGroup() + "</td><td>" +
-                    dt.getHealthCondition() + "</td><td>" + dt.getIndigenousStatus() + "</td><td>" + dt.getTotalHealthConditionCount() + "</td> "+ 
-                    "<td>" + dt.getTotalAgeDemographicsCount() + "</td> " +"<td>" + dt.getSex() + "</td> "+"</tr>";
+            html += "<tr><td>" + at.getAgeCount() + "</td><td>" + at.getCount() + "</td><td>" +"</tr>";
         }
         html += "</table>";
         }else {
