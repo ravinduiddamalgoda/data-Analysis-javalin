@@ -95,8 +95,19 @@ public class PageST3A implements Handler {
                 "    <!-- Age Filter -->\r\n" + //
                 "    <label for='ageFilter'>Select Age Range:</label>\r\n" + //
                 "    <select name='ageFilter' id='ageFilter'>\r\n" + //
-                "        <option value='0_4'>0-4</option>\r\n" + //
-                "        <option value='5_9'>5-9</option>\r\n" + //
+                "        <option value='0-4 years'>0-4</option>\r\n" + //
+                "        <option value='5-9 years'>5-9</option>\r\n" + //
+                "        <option value='10-14 years'>10-14</option>\r\n" + //
+                "        <option value='15-19 years'>15-19</option>\r\n" + //
+                "        <option value='20-24 years'>20-24</option>\r\n" + //
+                "        <option value='25-29 years'>25-29</option>\r\n" + //
+                "        <option value='30-34 years'>30-34</option>\r\n" + //
+                "        <option value='35-39 years'>35-39</option>\r\n" + //
+                "        <option value='40-44 years'>40-44</option>\r\n" + //
+                "        <option value='45_49 years'>45_49</option>\r\n" + //
+                "        <option value='50_54 years'>50_54</option>\r\n" + //
+                "        <option value='55_59 years'>55_59</option>\r\n" + //
+                "        <option value='60_64 years'>60_64</option>\r\n" + //
                 "        <!-- Add more age range options here -->\r\n" + //
                 "        <option value='65+'>65+</option>\r\n" + //
                 "    </select>\r\n" + //
@@ -104,8 +115,8 @@ public class PageST3A implements Handler {
                 "\r\n" + //
                 "    <!-- Gender Filter -->\r\n" + //
                 "    <label>Gender Filter:</label><br>\r\n" + //
-                "    <input type='checkbox' name='genderFilter' value='Male'> Male\r\n" + //
-                "    <input type='checkbox' name='genderFilter' value='Female'> Female\r\n" + //
+                "    <input type='checkbox' name='genderFilter' value='male'> Male\r\n" + //
+                "    <input type='checkbox' name='genderFilter' value='female'> Female\r\n" + //
                 "    <!-- Add more gender options as needed -->\r\n" + //
                 "    <br><br>\r\n" + //
                 "\r\n" + //

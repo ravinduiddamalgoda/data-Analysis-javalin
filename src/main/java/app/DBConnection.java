@@ -84,4 +84,73 @@ public class DBConnection {
         return table;
     }
 
+
+    public ArrayList<Data2A> FilteredData(String ageGroupFilter, String healthConditionFilter, String genderFilter, String sortField , String yearData , String indigenous_status) {
+        Connection connection = null;
+        ArrayList<Data2A> table = new ArrayList<Data2A>();
+    
+        try {
+            // Connect to the JDBC database
+            connection = DriverManager.getConnection(DATABASE);
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);
+            System.out.println(ageGroupFilter);
+            System.out.println(healthConditionFilter);
+            System.out.println(genderFilter);
+            System.out.println(sortField);
+            System.out.println(yearData);
+            System.out.println(indigenous_status);
+            // Customize the query based on the provided filters and sort field
+            String query = "SELECT a.year, a.age_group, h.health_condition, a.indigenous_status, " +
+                           "SUM(h.count) AS total_health_condition_count, SUM(a.count) AS total_age_demographics_count, a.sex " +
+                           "FROM AgeDemographics a " +
+                           "INNER JOIN HealthConditions h ON a.lga_code = h.lga_code " +
+                           "WHERE h.health_condition = '" + healthConditionFilter + "' " +
+                           "AND a.age_group = '" + ageGroupFilter + "' " +
+                           "AND a.sex = '" + genderFilter + "' " +
+                           "AND a.year = '"+ yearData + "'" +
+                           "AND a.indigenous_status  = '"+ indigenous_status + "'" +
+                           "GROUP BY a.year, a.age_group, h.health_condition, a.indigenous_status, a.sex ";
+    
+            if (sortField != null && !sortField.isEmpty()) {
+                query += "ORDER BY a." + sortField;
+                // query += "ORDER BY a.year";
+            } else {
+                query += "ORDER BY a.year";
+            }
+    
+            ResultSet results = statement.executeQuery(query);
+    
+            while (results.next()) {
+                String year = results.getString("year");
+                String ageGroup = results.getString("age_group");
+                String healthCondition = results.getString("health_condition");
+                String indigenousStatus = results.getString("indigenous_status");
+                int totalHealthConditionCount = results.getInt("total_health_condition_count");
+                int totalAgeDemographicsCount = results.getInt("total_age_demographics_count");
+                String sex = results.getString("sex");
+    
+                Data2A recent = new Data2A(year, ageGroup, healthCondition, indigenousStatus, totalHealthConditionCount, totalAgeDemographicsCount, sex);
+                table.add(recent);
+            }
+    
+            System.out.println("Data retrieved successfully.");
+            System.out.println(table.size());
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            System.out.println("Error occurred.");
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+    
+        return table;
+    }
+    
+
 }
