@@ -93,7 +93,7 @@ public class PageST3A implements Handler {
                 "\r\n" ;
 
                 html += "<label for='ageFilter' class='block text-sm font-medium text-gray-700'>Select Age Range:</label>";
-                html += "<select name='ageFilter' id='ageFilter' class='block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:border-indigo-300 sm:text-sm'>";
+                html += "<select name='ageFilter' id='ageFilter' class='block mt-1 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:border-indigo-300 sm:text-sm'>";
                 html += "<option value='0_4'>0-4 years</option>";
                 html += "<option value='5_9'>5-9 years</option>";
                 html += "<option value='10_14'>10-14 years</option>";
@@ -121,7 +121,7 @@ public class PageST3A implements Handler {
             "        </div>\r\n";
     
             html += "<label for='genderFilter' class='block text-sm font-medium text-gray-700'>Gender Filter:</label><br>";
-            html += "<select id='genderFilter' name='genderFilter' class='block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:border-indigo-300 sm:text-sm'>";
+            html += "<select id='genderFilter' name='genderFilter' class='block mt-1 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:border-indigo-300 sm:text-sm'>";
             html += "<option value='all'>All</option>";
             html += "<option value='male'>Male</option>";
             html += "<option value='female'>Female</option>";
