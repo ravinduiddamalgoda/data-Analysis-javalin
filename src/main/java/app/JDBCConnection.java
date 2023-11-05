@@ -913,7 +913,7 @@ public ArrayList<Education> getSchool(String LGAcode, String numSimilarLGAs, Str
         return combinedDataList; 
     }
 
-    public ArrayList<Education> getFilteredData(String ageRangeFilter, String genderFilter) {
+    public ArrayList<Education> getFilteredData(String ageRangeFilter, String genderFilter , String year) {
         Connection connection = null;
         ArrayList<Education> table = new ArrayList<Education>();
         // char gender;
@@ -932,8 +932,8 @@ public ArrayList<Education> getSchool(String LGAcode, String numSimilarLGAs, Str
             // Customize the query based on the provided age and gender filters
             String query = "SELECT ad.LGAcode, ad.year, ad.Indigenous_Status, ad.Sex, ad.AgeRange, ad.count as ageCount, mc.Condition, mc.count as conditionCount " +
                            "FROM AgeDemographics ad " +
-                           "JOIN MedicalConditions mc ON ad.LGAcode = mc.LGAcode AND ad.year = mc.year " +
-                           "WHERE ad.AgeRange IN ('"+ageRangeFilter+"') AND ad.Sex = '"+gender +"' LIMIT 100";
+                           "JOIN MedicalConditions mc ON ad.LGAcode = mc.LGAcode " +
+                           "WHERE ad.AgeRange IN ('"+ageRangeFilter+"') AND ad.Sex = '"+gender +"' AND ad.year = '"+year+"' LIMIT 100";
     
             ResultSet results = statement.executeQuery(query);
             if(results.next()){
@@ -1035,7 +1035,71 @@ public ArrayList<Education> getSchool(String LGAcode, String numSimilarLGAs, Str
     
         return table;
     }
+
+    public ArrayList<conditionCount>FilterConditionCount(String sortField,String  age,String indigenous_status ,String lgaName ,String order ,String health_condition)
+    {
+       Connection connection = null;
+        ArrayList<conditionCount> table = new ArrayList<conditionCount>();
     
+        try {
+            // Connect to the JDBC database
+            connection = DriverManager.getConnection(DATABASE);
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);
+            
+            System.out.println(lgaName);
+            System.out.println(sortField);
+            System.out.println(indigenous_status);
+            
+            String query = "Select \r\n" + //
+                    "    m.Condition as condition,\r\n" + //
+                    "    m.count as sumCount\r\n" + //
+                    "from medicalConditions m\r\n" + //
+                    "INNER JOIN \r\n" + //
+                    "LGA l\r\n" + //
+                    "ON m.LGAcode = l.LGAcode\r\n" + //
+                    "Where \r\n" + //
+                    "l.name = '"+lgaName+"'\r\n" + //
+                    "AND a.Indigenous_Status = '"+indigenous_status+"'\r\n" + //
+                    "AND m.Condition = '"+health_condition+"'\r\n" +
+                    "Group by m.Condition, m.Indigenous_Status\r\n";
+    
+            if (order != null && !order.isEmpty()) {
+                query += "ASC";
+                // query += "ORDER BY a.year";
+            } else {
+                query += order;
+            }
+    
+            ResultSet results = statement.executeQuery(query);
+    
+            while (results.next()) {
+                String condition = results.getString("condition");
+                String sumCount = results.getString("sumCount");
+                
+    
+                conditionCount recent =  new conditionCount(condition, sumCount);
+                table.add(recent);
+            }
+    
+            System.out.println("Data retrieved successfully.");
+            System.out.println(table.size());
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+            System.out.println("Error occurred.");
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+    
+        return table;
+
+    }
     
 }
 

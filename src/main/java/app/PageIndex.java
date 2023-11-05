@@ -151,63 +151,122 @@ public class PageIndex implements Handler {
     // Combine the data elements and script
     return dataElements + "\n" + scriptElement;
 }
-    private String generateStaticHtmlContent() {
-            // Generate the static part of the HTML content
-            return """
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Homepage - Voice to Parliament</title>
-                    <!-- Include Tailwind CSS from CDN -->
-                    <script src="https://cdn.tailwindcss.com"></script>
-                    <!-- Link to the common CSS file -->
-                    <link rel="stylesheet" href="/css/common.css">
-                </head>
-                <body class="bg-gray-100">
-                    <!-- Navigation bar -->
-                    <div class="bg-blue-600 p-4 text-white text-center">
-                        <h1 class="text-xl font-semibold">Voice to Parliament</h1>
-                    </div>
-                    <div class="flex justify-center space-x-4 bg-blue-500 p-3">
-                        <a href="/" class="text-white hover:bg-blue-700 px-3 py-2 rounded">Homepage</a>
-                        <!-- Add more navigation links here -->
-                    </div>
-                    <!-- Page content -->
-                    <main class="container mx-auto px-6 py-8">
-                        <!-- Dynamic Content goes here -->
-                        <!-- Divs that will hold the charts -->
-                        <div id="total_population_chart_div"></div>
-                        <div id="state_chart_div"></div>
-                        <div id="lga_chart_div"></div>
-                        <!-- Additional divs for other charts can be added here -->
-                    </main>
-                    <!-- Load Google Charts -->
-                    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-                    <script type="text/javascript">
-                        google.charts.load('current', {'packages':['corechart']});
-                        google.charts.setOnLoadCallback(drawCharts);
-                        // Your JavaScript functions for chart drawing will go here...
-                    </script>
-                </body>
-                </html>
-                """;
-        }
+private String generateStaticHtmlContent() {
+    // Generate the static part of the HTML content with Bootstrap and custom styles
+    return """
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Homepage - Voice to Parliament</title>
+            <!-- Bootstrap CSS -->
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+            <style>
+    /* Custom styles */
+    :root {
+        --primary-color: #5b7ab3;
+        --secondary-color: #4a6572;
+        --accent-color: #f9aa33;
+        --background-color: #f0f0f0;
+        --text-color: #333;
+        --footer-background-color: #333;
+        --footer-text-color: #fff;
+    }
+    body {
+        background-color: var(--background-color);
+        color: var(--text-color);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding-top: 56px; /* Padding to ensure content isn't hidden behind fixed navbar */
+    }
+    .navbar {
+        background-color: var(--primary-color);
+        border-bottom: 3px solid var(--accent-color);
+    }
+    .chart-container {
+        animation: fadeIn 1s ease-in-out;
+        padding: 15px;
+        background-color: #fff;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 15px; /* Rounded corners for the chart containers */
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    .footer {
+        background-color: var(--footer-background-color);
+        color: var(--footer-text-color);
+        padding: 20px 0;
+    }
+</style>
 
-    private String generateStaticHtmlFooter() {
-        // Generate the static HTML footer content
-        return """
-            <footer class='bg-white shadow mt-8'>
-                <div class='container mx-auto px-6 py-4'>
-                    <p class='text-gray-700 text-sm'>© 2023 Voice to Parliament. All rights reserved.</p>
-                </div>
-            </footer>
-            <script>
-            // Additional JavaScript can go here
-            </script>
+        </head>
+        <body>
+            <!-- Navigation bar -->
+            <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">Voice to Parliament</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/mission.html">Our Mission</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/page2A.html">Age & Health</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/page2B.html">Education</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/page3A.html">Changing The Gap</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/page3B.html">Similar LGAs</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+    
+            
+            <!-- Page content -->
+            <div class="container mt-5">
+                <!-- Dynamic Content goes here -->
+                <!-- Divs that will hold the charts -->
+                <div id="total_population_chart_div" class="chart-container"></div>
+                <div id="state_chart_div" class="chart-container"></div>
+                <div id="lga_chart_div" class="chart-container"></div>
+                <!-- Additional divs for other charts can be added here -->
+            </div>
+        </body>
+        </html>
+        """;
+}
+
+private String generateStaticHtmlFooter() {
+    // Generate the static HTML footer content
+    return """
+        <footer class="footer">
+            <div class="container">
+                <p class="text-center">© 2023 Voice to Parliament. All rights reserved.</p>
+            </div>
+        </footer>
+        <!-- Bootstrap JS, Popper.js, and jQuery -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.8.7/umd.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
             </body>
             </html>
-            """;
+        """;
     }    
 }

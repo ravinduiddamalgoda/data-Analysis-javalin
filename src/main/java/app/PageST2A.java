@@ -31,7 +31,48 @@ public class PageST2A implements Handler {
 
     // Add some CSS (external file)
     html = html + "<link rel='stylesheet' type='text/css' href='common.css'/>";
-    html += "<script src=\"https://cdn.tailwindcss.com\"></script>";
+    html += "<script src='https://cdn.tailwindcss.com'></script>";
+    html+= "<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'>";
+    html += "         <style>\r\n" + //
+            "    /* Custom styles */\r\n" + //
+            "    :root {\r\n" + //
+            "        --primary-color: #5b7ab3;\r\n" + //
+            "        --secondary-color: #4a6572;\r\n" + //
+            "        --accent-color: #f9aa33;\r\n" + //
+            "        --background-color: #f0f0f0;\r\n" + //
+            "        --text-color: #333;\r\n" + //
+            "        --footer-background-color: #333;\r\n" + //
+            "        --footer-text-color: #fff;\r\n" + //
+            "    }\r\n" + //
+            "    body {\r\n" + //
+            "        background-color: var(--background-color);\r\n" + //
+            "        color: var(--text-color);\r\n" + //
+            "        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\r\n" + //
+            "        margin: 0;\r\n" + //
+            "        padding-top: 56px; /* Padding to ensure content isn't hidden behind fixed navbar */\r\n" + //
+            "    }\r\n" + //
+            "    .navbar {\r\n" + //
+            "        background-color: var(--primary-color);\r\n" + //
+            "        border-bottom: 3px solid var(--accent-color);\r\n" + //
+            "    }\r\n" + //
+            "    .chart-container {\r\n" + //
+            "        animation: fadeIn 1s ease-in-out;\r\n" + //
+            "        padding: 15px;\r\n" + //
+            "        background-color: #fff;\r\n" + //
+            "        margin-bottom: 30px;\r\n" + //
+            "        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\r\n" + //
+            "        border-radius: 15px; /* Rounded corners for the chart containers */\r\n" + //
+            "    }\r\n" + //
+            "    @keyframes fadeIn {\r\n" + //
+            "        from { opacity: 0; }\r\n" + //
+            "        to { opacity: 1; }\r\n" + //
+            "    }\r\n" + //
+            "    .footer {\r\n" + //
+            "        background-color: var(--footer-background-color);\r\n" + //
+            "        color: var(--footer-text-color);\r\n" + //
+            "        padding: 20px 0;\r\n" + //
+            "    }\r\n" + //
+            "</style>";
     html = html + "</head>";
 
     // Add the body
@@ -46,16 +87,38 @@ public class PageST2A implements Handler {
 
     // Add the topnav
     // This uses a Java v15+ Text Block
-    html = html + """
-            <div class='topnav'>
-                <a href='/'>Homepage</a>
-                <a href='mission.html'>Our Mission</a>
-                <a href='page2A.html'>Sub Task 2.A</a>
-                <a href='page2B.html'>Sub Task 2.B</a>
-                <a href='page3A.html'>Sub Task 3.A</a>
-                <a href='page3B.html'>Sub Task 3.B</a>
-            </div>
-        """;
+   html += "<nav class='navbar navbar-expand-lg navbar-dark fixed-top'>\r\n" + //
+           "    <div class='container'>\r\n" + //
+           "        <a class='navbar-brand' href='/'>Voice to Parliament</a>\r\n" + //
+           "        <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarNav'\r\n" + //
+           "                aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation'>\r\n" + //
+           "            <span class='navbar-toggler-icon'></span>\r\n" + //
+           "        </button>\r\n" + //
+           "        <div class='collapse navbar-collapse' id='navbarNav'>\r\n" + //
+           "            <ul class='navbar-nav ml-auto'>\r\n" + //
+           "                <li class='nav-item active'>\r\n" + //
+           "                    <a class='nav-link' href='/'>Home</span></a>\r\n" + //
+           "                </li>\r\n" + //
+           "                <li class='nav-item'>\r\n" + //
+           "                    <a class='nav-link' href='/mission.html'>Our Mission</a>\r\n" + //
+           "                </li>\r\n" + //
+           "                <li class='nav-item'>\r\n" + //
+           "                    <a class='nav-link' href='/page2A.html'>Age & Health</a>\r\n" + //
+           "                </li>\r\n" + //
+           "                <li class='nav-item'>\r\n" + //
+           "                    <a class='nav-link' href='/page2B.html'>Education</a>\r\n" + //
+           "                </li>\r\n" + //
+           "                <li class='nav-item'>\r\n" + //
+           "                    <a class='nav-link' href='/page3A.html'>Changing The Gap</a>\r\n" + //
+           "                </li>\r\n" + //
+           "                <li class='nav-item'>\r\n" + //
+           "                    <a class='nav-link' href='/page3B.html'>Similar LGAs</a>\r\n" + //
+           "                </li>\r\n" + //
+           "            </ul>\r\n" + //
+           "        </div>\r\n" + //
+           "    </div>\r\n" + //
+           "</nav>\r\n" + //
+           "";
 
     // Add header content block
     html = html + """
@@ -98,29 +161,17 @@ public class PageST2A implements Handler {
             "        <div class='mb-4'>\r\n" + //
             "            <label for='health_condition' class='text-blue-500'>Health Condition:</label>\r\n" + //
             "            <select name='health_condition' id='health_condition' class='bg-blue-100 p-2 rounded'>\r\n" + //
-           "    <option value='arthritis'>Arthritis</option>\r\n" + //
-            "    <option value='Default' selected>Default</option>\r\n" + //
-            "    <option value='arthritis_non'>Arthritis (Non-Indigenous)</option>\r\n" + //
+            "    <option value='arthritis'>Arthritis</option>\r\n" + //
             "    <option value='asthma'>Asthma</option>\r\n" + //
-            "    <option value='asthma_non'>Asthma (Non-Indigenous)</option>\r\n" + //
             "    <option value='cancer'>Cancer</option>\r\n" + //
-            "    <option value='cancer_non'>Cancer (Non-Indigenous)</option>\r\n" + //
             "    <option value='dementia'>Dementia</option>\r\n" + //
-            "    <option value='dementia_non'>Dementia (Non-Indigenous)</option>\r\n" + //
             "    <option value='diabetes'>Diabetes</option>\r\n" + //
-            "    <option value='diabetes_non'>Diabetes (Non-Indigenous)</option>\r\n" + //
             "    <option value='heartdisease'>Heart Disease</option>\r\n" + //
-            "    <option value='heartdisease_non'>Heart Disease (Non-Indigenous)</option>\r\n" + //
             "    <option value='kidneydisease'>Kidney Disease</option>\r\n" + //
-            "    <option value='kidneydisease_non'>Kidney Disease (Non-Indigenous)</option>\r\n" + //
             "    <option value='lungcondition'>Lung Condition</option>\r\n" + //
-            "    <option value='lungcondition_non'>Lung Condition (Non-Indigenous)</option>\r\n" + //
             "    <option value='mentalhealth'>Mental Health</option>\r\n" + //
-            "    <option value='mentalhealth_non'>Mental Health (Non-Indigenous)</option>\r\n" + //
             "    <option value='stroke'>Stroke</option>\r\n" + //
-            "    <option value='stroke_non'>Stroke (Non-Indigenous)</option>\r\n" + //
-            "    <option value='other'>Other</option>\r\n" + //
-            "    <option value='other_non'>Other (Non-Indigenous)</option>" + 
+        "    <option value='other'>Other</option>\r\n" + //
             "            </select>\r\n" + //
             "        </div>\r\n" + //
             "\r\n" + //
@@ -291,7 +342,7 @@ public class PageST2A implements Handler {
         if (filteredData.size() > 0) {
             html += "<table class='border border-collapse border-blue-500 m-4'>";
             // Create table headers
-            html += "<tr class='bg-blue-500 text-white'><th class='p-2'>Year</th><th class='p-2'>Age Range</th></tr>";
+            html += "<tr class='bg-blue-500 text-white'><th class='p-2'>Age Range</th><th class='p-2'>Count </th></tr>";
             for (ageCount at : filteredData) {
                 // Add data to the table
                 html += "<tr class='border'><td class='p-2'>" + at.getAgeCount() + "</td><td class='p-2'>" + at.getCount() + "</td></tr>";
@@ -304,15 +355,36 @@ public class PageST2A implements Handler {
         
     // Footer
     }else if(context.formParams("health_condition")!= null && context.formParams("ageFilter")!= null && context.formParams("indigenous_status") != null ){
+        String age = context.formParam("ageFilter");
+        String health_condition = context.formParam("health_condition");
+        String indigenous_status = context.formParam("indigenous_status");
+        String order = context.formParam("order");
+        String lgaName = context.formParam("LgaName");
+        String sortField = context.formParam("sortField");
+        ArrayList<conditionCount> filteredData = jdbc.FilterConditionCount(sortField, age, indigenous_status , lgaName , order , health_condition);
+        if (filteredData.size() > 0) {
+            html += "<table class='border border-collapse border-blue-500 m-4'>";
+            // Create table headers
+            html += "<tr class='bg-blue-500 text-white'><th class='p-2'>Health Condition</th><th class='p-2'>Count </th></tr>";
+            for (conditionCount ct : filteredData) {
+                // Add data to the table
+                html += "<tr class='border'><td class='p-2'>" + ct.getHealthCondition() + "</td><td class='p-2'>" + ct.getCount() + "</td></tr>";
+            }
+            html += "</table>";
+        } else {
+            html += "<h2 class='text-red-500 text-center mt-4'>No Data Found !!</h2>";
+        }
 
 
     }
     html += "</div>";
     // Footer
     html = html + """ 
-        <div class = 'footer'>
-    <p> COSC2803 - Studio Project Starter Code(Sep23) </p> 
-    </div>
+        <footer class="footer">
+        <div class="container">
+            <p class="text-center">© 2023 Voice to Parliament. All rights reserved.</p>
+        </div>
+    </footer>
     """;
 
     // Finish the HTML webpage

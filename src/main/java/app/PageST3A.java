@@ -37,6 +37,7 @@ public class PageST3A implements Handler {
 
         // Add some CSS (external file)
         html = html + "<link rel='stylesheet' type='text/css' href='common.css' />";
+        html += "<script src='https://cdn.tailwindcss.com'></script>";
         html = html + "</head>";
 
         // Add the body
@@ -80,7 +81,7 @@ public class PageST3A implements Handler {
                 "        }\r\n" + //
                 "\r\n" + //
                 "        // Check if at least one gender option is checked\r\n" + //
-                "        var genderCheckboxes = document.querySelectorAll('input[name=\"genderFilter\"]:checked');\r\n" + //
+                "        var genderCheckboxes = document.querySelectorAll('genderFilter').value;\r\n" + //
                 "        if (genderCheckboxes.length === 0) {\r\n" + //
                 "            alert('Please select at least one gender.');\r\n" + //
                 "            return false;\r\n" + //
@@ -91,38 +92,53 @@ public class PageST3A implements Handler {
                 "</script>\r\n" + //
                 "\r\n" ;
 
-            html = html +"<form action='/page3A.html' method='post' onsubmit='return validateForm();'>\r\n" + //
-                "    <!-- Age Filter -->\r\n" + //
-                "    <label for='ageFilter'>Select Age Range:</label>\r\n" + //
-                "    <select name='ageFilter' id='ageFilter'>\r\n" + //
-                "        <option value='0_4'>0-4 years</option>\r\n" + //
-                "        <option value='5_9'>5-9 years</option>\r\n" + //
-                "        <option value='10_14'>10-14 years</option>\r\n" + //
-                "        <option value='15_19'>15-19 years</option>\r\n" + //
-                "        <option value='20_24'>20-24 years</option>\r\n" + //
-                "        <option value='25_29'>25-29 years</option>\r\n" + //
-                "        <option value='30_34'>30-34 years</option>\r\n" + //
-                "        <option value='35_39'>35-39 years</option>\r\n" + //
-                "        <option value='40_44'>40-44 years</option>\r\n" + //
-                "        <option value='45_49'>45-49 years</option>\r\n" + //
-                "        <option value='50_54'>50-54 years</option>\r\n" + //
-                "        <option value='55_59'>55-59 years</option>\r\n" + //
-                "        <option value='60_64'>60-64 years</option>\r\n" + //
-                "        <option value='65+'>65+</option>\r\n" + //
-                "    </select>\r\n" + //
-                "    <br><br>\r\n" + //
-                "\r\n" + //
-                "    <!-- Gender Filter -->\r\n" + //
-                "    <label>Gender Filter:</label><br>\r\n" + //
-                "    <input type='checkbox' name='genderFilter' value='male'> Male\r\n" + //
-                "    <input type='checkbox' name='genderFilter' value='female'> Female\r\n" + //
-                "    <!-- Add more gender options as needed -->\r\n" + //
-                "    <br><br>\r\n" + //
-                "\r\n";
-            html += "";
+                html += "<label for='ageFilter' class='block text-sm font-medium text-gray-700'>Select Age Range:</label>";
+                html += "<select name='ageFilter' id='ageFilter' class='block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:border-indigo-300 sm:text-sm'>";
+                html += "<option value='0_4'>0-4 years</option>";
+                html += "<option value='5_9'>5-9 years</option>";
+                html += "<option value='10_14'>10-14 years</option>";
+                html += "<option value='15_19'>15-19 years</option>";
+                html += "<option value='20_24'>20-24 years</option>";
+                html += "<option value='25_29'>25-29 years</option>";
+                html += "<option value='30_34'>30-34 years</option>";
+                html += "<option value='35_39'>35-39 years</option>";
+                html += "<option value='40_44'>40-44 years</option>";
+                html += "<option value='45_49'>45-49 years</option>";
+                html += "<option value='50_54'>50-54 years</option>";
+                html += "<option value='55_59'>55-59 years</option>";
+                html += "<option value='60_64'>60-64 years</option>";
+                html += "<option value='65+'>65+</option>";
+                html += "</select>";
+                
 
-            html +=    "    <button type='submit'>Apply Filters</button>\r\n" + //
-                "</form> ";
+            html +="        <div class='mb-4'>\r\n" + //
+            "            <label for='indigenous_status' class='text-blue-500'>Indigenous Status:</label>\r\n" + //
+            "            <select name='indigenous_status' id='indigenous_status' class='bg-blue-100 p-2 rounded'>\r\n" + //
+            "                <option value='Indigenous'>Indigenous</option>\r\n" + //
+            "                <option value='NonIndigenous'>Non-Indigenous</option>\r\n" + //
+            "                <option value='NotStated'>Not stated</option>\r\n" + //
+            "            </select>\r\n" + //
+            "        </div>\r\n";
+    
+            html += "<label for='genderFilter' class='block text-sm font-medium text-gray-700'>Gender Filter:</label><br>";
+            html += "<select id='genderFilter' name='genderFilter' class='block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:border-indigo-300 sm:text-sm'>";
+            html += "<option value='all'>All</option>";
+            html += "<option value='male'>Male</option>";
+            html += "<option value='female'>Female</option>";
+            html += "</select>";
+
+
+            html += "        <div class='mb-4'>\r\n" + //
+                    "            <label for='year' class='text-blue-500'>Enter the year:</label>\r\n" + //
+                    "            <select name='year' id='sortField' class='bg-blue-100 p-2 rounded'>\r\n" + //
+                    "                <option value='2016'>2016</option>\r\n" + //
+                    "                <option value='2020'>2020</option>\r\n" + //
+                    "            </select>\r\n" + //
+                    "        </div>\r\n";
+
+                    html += "<button type='submit' class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>Apply Filters</button>";
+
+                html += "</form> ";
 
             
 
@@ -130,29 +146,34 @@ public class PageST3A implements Handler {
         html = html + "</div>";
         if (context.formParam("ageFilter") != null && context.formParams("genderFilter") != null) {
             String age = context.formParam("ageFilter");
-            // List<String> gender = context.formParams("genderFilter");
+            String year = context.formParam("year");
             String gender = context.formParam("genderFilter");
-            ArrayList<Education> filteredData = jdbc.getFilteredData(age, gender);
-            if(filteredData.size() > 0){
-                html += "<table>";
-            // Create table headers
-            html += "<tr><th>LGA Code</th><th>Year</th><th>Indigenous</th><th>Age Count</th><th>Condition Count</th></tr>";
-            for (Education education : filteredData) {
-                // Add data to the table
-                html += "<tr><td>" + education.getColumn1() + "</td><td>" + education.getColumn2() + "</td><td>" +
-                        education.getColumn3() + "</td><td>" + education.getColumn4() + "</td><td>" + education.getColumn5() + "</td></tr>";
-            }
-            html += "</table>";
-            }else {
-                html += "<h2>No Data Found !!</h2>"; 
-            }
+            ArrayList<Education> filteredData = jdbc.getFilteredData(age, gender, year);
             
-        // Footer
+            if (filteredData.size() > 0) {
+                html += "<table class='table-auto'>";
+                // Create table headers
+                html += "<tr class='bg-gray-200'><th class='px-4 py-2'>LGA Code</th><th class='px-4 py-2'>Year</th><th class='px-4 py-2'>Indigenous</th><th class='px-4 py-2'>Age Count</th><th class='px-4 py-2'>Condition Count</th></tr>";
+                for (Education education : filteredData) {
+                    // Add data to the table
+                    html += "<tr class='border'><td class='px-4 py-2'>" + education.getColumn1() + "</td><td class='px-4 py-2'>" + education.getColumn2() + "</td><td class='px-4 py-2'>" +
+                            education.getColumn3() + "</td><td class='px-4 py-2'>" + education.getColumn4() + "</td><td class='px-4 py-2'>" + education.getColumn5() + "</td></tr>";
+                }
+                html += "</table>";
+            } else {
+                html += "<h2 class='text-red-500'>No Data Found !!</h2>";
+            }
         }
+        
+        // Footer
+        html += "<div class='footer bg-gray-200 text-center py-2 mt-4'>Education Completion of States and LGA's According to Census Data</div>";
+        
         html = html + """
-            <div class='footer'>
-                <p>COSC2803 - Studio Project Starter Code (Sep23)</p>
+            <footer class="footer">
+            <div class="container">
+                <p class="text-center">© 2023 Voice to Parliament. All rights reserved.</p>
             </div>
+        </footer>
         """;
 
         // Finish the HTML webpage
