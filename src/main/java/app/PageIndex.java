@@ -1,161 +1,213 @@
 package app;
 
-import java.util.ArrayList;
-
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
+import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
+import com.google.gson.Gson;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-/**
- * Example Index HTML class using Javalin
- * <p>
- * Generate a static HTML page using Javalin
- * by writing the raw HTML into a Java String object
- *
- * @author Timothy Wiley, 2023. email: timothy.wiley@rmit.edu.au
- * @author Santha Sumanasekara, 2021. email: santha.sumanasekara@rmit.edu.au
- */
 public class PageIndex implements Handler {
-
-    // URL of this page relative to http://localhost:7001/
     public static final String URL = "/";
+    private static final String DATABASE_URL = "jdbc:sqlite:database/vtp.db";
 
     @Override
-    public void handle(Context context) throws Exception {
-        // Create a simple HTML webpage in a String
-        String html = "<html>";
-
-        // Add some Header information
-        html = html + "<head>" + 
-               "<title>Homepage</title>";
-
-        // Add some CSS (external file)
-        html = html + "<link rel='stylesheet' type='text/css' href='common.css' />";
-        html = html + "</head>";
-
-        // Add the body
-        html = html + "<body>";
-
-        // Add the topnav
-        // This uses a Java v15+ Text Block
-        html = html + """
-            <div class='topnav'>
-                <a href='/'>Homepage</a>
-                <a href='mission.html'>Our Mission</a>
-                <a href='page2A.html'>Sub Task 2.A</a>
-                <a href='page2B.html'>Education</a>
-                <a href='page3A.html'>Sub Task 3.A</a>
-                <a href='page3B.html'>Find SImilar LGAs</a>
-            </div>
-        """;
-
-        // Add header content block
-        html = html + """
-            <div class='header'>
-                <h1>
-                    <img src='logo.png' class='top-image' alt='RMIT logo' height='75'>
-                    Homepage
-                </h1>
-            </div>
-        """;
-
-        // Add Div for page Content
-        html = html + "<div class='content'>";
-
-        // Add HTML for the page content
-        html = html + """
-            <p>Homepage content</p>
-            """;
-
-        // Get the ArrayList of Strings of all LGAs
-        ArrayList<String> lgaNames = getLGAs2016();
-
-        // Add HTML for the LGA list
-        html = html + "<h1>All 2016 LGAs in the Voice to Parliament database</h1>" + "<ul>";
-
-        // Finally we can print out all of the LGAs
-        for (String name : lgaNames) {
-            html = html + "<li>" + name + "</li>";
-        }
-
-        // Finish the List HTML
-        html = html + "</ul>";
-
-        // Close Content div
-        html = html + "</div>";
-
-        // Footer
-        html = html + """
-            <div class='footer'>
-                <p>COSC2803 - Studio Project Starter Code (Sep23)</p>
-            </div>
-        """;
-
-        // Finish the HTML webpage
-        html = html + "</body>" + "</html>";
-
-
-        // DO NOT MODIFY THIS
-        // Makes Javalin render the webpage
-        context.html(html);
-    }
-
-
-    /**
-     * Get the names of the LGAs in the database.
-     */
-    public ArrayList<String> getLGAs2016() {
-        // Create the ArrayList of LGA objects to return
-        ArrayList<String> lgas = new ArrayList<String>();
-
-        // Setup the variable for the JDBC connection
-        Connection connection = null;
-
+    public void handle(Context context) {
         try {
-            // Connect to JDBC data base
-            connection = DriverManager.getConnection(JDBCConnection.DATABASE);
+            Map<Integer, Integer> totalPopulationData = getTotalPopulationByYears(new int[]{2016, 2021});
+            Map<String, Map<Integer, Integer>> statePopulationData = getStatePopulationByYears(new int[]{2016, 2021});
+            Map<Integer, Integer> lgaCountData = getLGACountByYears(new int[]{2016, 2021});
 
-            // Prepare a new SQL Query & Set a timeout
-            Statement statement = connection.createStatement();
-            statement.setQueryTimeout(30);
+            String dynamicContent = generateDynamicContent(totalPopulationData, statePopulationData, lgaCountData);
+            String html = generateStaticHtmlContent() + dynamicContent + generateStaticHtmlFooter();
+            context.html(html);
+        } catch (Exception e) {
+            context.status(500).html("An error occurred: " + e.getMessage());
+        }
+    }
 
-            // The Query
-            String query = "SELECT * FROM LGA WHERE year='2016'";
-            
-            // Get Result
-            ResultSet results = statement.executeQuery(query);
-
-            // Process all of the results
-            while (results.next()) {
-                String name16  = results.getString("name");
-
-                // Add the lga object to the array
-                lgas.add(name16);
+    private Map<Integer, Integer> getTotalPopulationByYears(int[] years) throws SQLException {
+        Map<Integer, Integer> totalPopulationData = new HashMap<>();
+        String sql = "SELECT Year, SUM(Population) as TotalPopulation FROM LGAPopulation WHERE Year IN (?, ?) GROUP BY Year";
+        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            for (int i = 0; i < years.length; i++) {
+                pstmt.setInt(i + 1, years[i]);
             }
-
-            // Close the statement because we are done with it
-            statement.close();
-        } catch (SQLException e) {
-            // If there is an error, lets just pring the error
-            System.err.println(e.getMessage());
-        } finally {
-            // Safety code to cleanup
-            try {
-                if (connection != null) {
-                    connection.close();
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    totalPopulationData.put(rs.getInt("Year"), rs.getInt("TotalPopulation"));
                 }
-            } catch (SQLException e) {
-                // connection close failed.
-                System.err.println(e.getMessage());
             }
         }
-
-        // Finally we return all of the lga
-        return lgas;
+        return totalPopulationData;
     }
+
+    private Map<String, Map<Integer, Integer>> getStatePopulationByYears(int[] years) throws SQLException {
+        Map<String, Map<Integer, Integer>> statePopulationData = new HashMap<>();
+        String sql = "SELECT LGA.stateabbr, LGA.Year, SUM(LGAPopulation.Population) as StatePopulation " +
+                     "FROM LGAPopulation " +
+                     "JOIN LGA ON LGAPopulation.LGAcode = LGA.lgacode " +
+                     "WHERE LGA.Year IN (?, ?) " +
+                     "GROUP BY LGA.stateabbr, LGA.Year";
+        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            for (int i = 0; i < years.length; i++) {
+                pstmt.setInt(i + 1, years[i]);
+            }
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String stateAbbr = rs.getString("stateabbr");
+                    int year = rs.getInt("Year");
+                    int population = rs.getInt("StatePopulation");
+                    statePopulationData.computeIfAbsent(stateAbbr, k -> new HashMap<>()).put(year, population);
+                }
+            }
+        }
+        return statePopulationData;
+    }
+
+    private Map<Integer, Integer> getLGACountByYears(int[] years) throws SQLException {
+        Map<Integer, Integer> lgaCounts = new HashMap<>();
+        String sql = "SELECT Year, COUNT(DISTINCT lgacode) as TotalLGAs FROM LGA WHERE Year IN (?, ?) GROUP BY Year";
+        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            for (int i = 0; i < years.length; i++) {
+                pstmt.setInt(i + 1, years[i]);
+            }
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    lgaCounts.put(rs.getInt("Year"), rs.getInt("TotalLGAs"));
+                }
+            }
+        }
+        return lgaCounts;
+    }
+
+    private String generateDynamicContent(Map<Integer, Integer> totalPopulationData, 
+                                      Map<String, Map<Integer, Integer>> statePopulationData, 
+                                      Map<Integer, Integer> lgaCountData) {
+    Gson gson = new Gson();
+    String totalPopulationJson = gson.toJson(totalPopulationData);
+    String statePopulationJson = gson.toJson(statePopulationData);
+    String lgaCountJson = gson.toJson(lgaCountData);
+
+    // Format the JSON data into HTML elements
+    String dataElements = 
+        "<div id=\"totalPopulationData\" style=\"display: none;\">" + totalPopulationJson + "</div>\n" +
+        "<div id=\"statePopulationData\" style=\"display: none;\">" + statePopulationJson + "</div>\n" +
+        "<div id=\"lgaCountData\" style=\"display: none;\">" + lgaCountJson + "</div>\n";
+
+    // Script element
+    String scriptElement = 
+        "<script type=\"text/javascript\" src=\"https://www.gstatic.com/charts/loader.js\"></script>\n" +
+        "<script type=\"text/javascript\">\n" +
+        "    google.charts.load('current', {'packages':['corechart']});\n" +
+        "    google.charts.setOnLoadCallback(drawCharts);\n" +
+        "\n" +
+        "    function drawCharts() {\n" +
+        "        var totalPopulationData = JSON.parse(document.getElementById('totalPopulationData').textContent);\n" +
+        "        var statePopulationData = JSON.parse(document.getElementById('statePopulationData').textContent);\n" +
+        "        var lgaCountData = JSON.parse(document.getElementById('lgaCountData').textContent);\n" +
+        "\n" +
+        "        var totalPopulationChartData = google.visualization.arrayToDataTable([\n" +
+        "            ['Year', 'Population'],\n" +
+        "            ['2016', totalPopulationData[2016]],\n" +
+        "            ['2021', totalPopulationData[2021]]\n" +
+        "        ]);\n" +
+        "\n" +
+        "        var statePopulationChartData = new google.visualization.DataTable();\n" +
+        "        statePopulationChartData.addColumn('string', 'State');\n" +
+        "        statePopulationChartData.addColumn('number', '2016');\n" +
+        "        statePopulationChartData.addColumn('number', '2021');\n" +
+        "        for (var state in statePopulationData) {\n" +
+        "            statePopulationChartData.addRow([state, statePopulationData[state][2016], statePopulationData[state][2021]]);\n" +
+        "        }\n" +
+        "\n" +
+        "        var lgaCountChartData = google.visualization.arrayToDataTable([\n" +
+        "            ['Year', 'LGA Count'],\n" +
+        "            ['2016', lgaCountData[2016]],\n" +
+        "            ['2021', lgaCountData[2021]]\n" +
+        "        ]);\n" +
+        "\n" +
+        "        var options = {\n" +
+        "            title: 'Population and LGA Count',\n" +
+        "            chartArea: { width: '50%' },\n" +
+        "            hAxis: { title: 'Year', minValue: 0 },\n" +
+        "            vAxis: { title: 'Count' }\n" +
+        "        };\n" +
+        "\n" +
+        "        var totalPopulationChart = new google.visualization.BarChart(document.getElementById('total_population_chart_div'));\n" +
+        "        totalPopulationChart.draw(totalPopulationChartData, options);\n" +
+        "\n" +
+        "        var stateChart = new google.visualization.BarChart(document.getElementById('state_chart_div'));\n" +
+        "        stateChart.draw(statePopulationChartData, options);\n" +
+        "\n" +
+        "        var lgaChart = new google.visualization.BarChart(document.getElementById('lga_chart_div'));\n" +
+        "        lgaChart.draw(lgaCountChartData, options);\n" +
+        "    }\n" +
+        "</script>\n";
+
+    // Combine the data elements and script
+    return dataElements + "\n" + scriptElement;
+}
+    private String generateStaticHtmlContent() {
+            // Generate the static part of the HTML content
+            return """
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Homepage - Voice to Parliament</title>
+                    <!-- Include Tailwind CSS from CDN -->
+                    <script src="https://cdn.tailwindcss.com"></script>
+                    <!-- Link to the common CSS file -->
+                    <link rel="stylesheet" href="/css/common.css">
+                </head>
+                <body class="bg-gray-100">
+                    <!-- Navigation bar -->
+                    <div class="bg-blue-600 p-4 text-white text-center">
+                        <h1 class="text-xl font-semibold">Voice to Parliament</h1>
+                    </div>
+                    <div class="flex justify-center space-x-4 bg-blue-500 p-3">
+                        <a href="/" class="text-white hover:bg-blue-700 px-3 py-2 rounded">Homepage</a>
+                        <!-- Add more navigation links here -->
+                    </div>
+                    <!-- Page content -->
+                    <main class="container mx-auto px-6 py-8">
+                        <!-- Dynamic Content goes here -->
+                        <!-- Divs that will hold the charts -->
+                        <div id="total_population_chart_div"></div>
+                        <div id="state_chart_div"></div>
+                        <div id="lga_chart_div"></div>
+                        <!-- Additional divs for other charts can be added here -->
+                    </main>
+                    <!-- Load Google Charts -->
+                    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+                    <script type="text/javascript">
+                        google.charts.load('current', {'packages':['corechart']});
+                        google.charts.setOnLoadCallback(drawCharts);
+                        // Your JavaScript functions for chart drawing will go here...
+                    </script>
+                </body>
+                </html>
+                """;
+        }
+
+    private String generateStaticHtmlFooter() {
+        // Generate the static HTML footer content
+        return """
+            <footer class='bg-white shadow mt-8'>
+                <div class='container mx-auto px-6 py-4'>
+                    <p class='text-gray-700 text-sm'>© 2023 Voice to Parliament. All rights reserved.</p>
+                </div>
+            </footer>
+            <script>
+            // Additional JavaScript can go here
+            </script>
+            </body>
+            </html>
+            """;
+    }    
 }

@@ -31,6 +31,7 @@ public class PageST2A implements Handler {
 
     // Add some CSS (external file)
     html = html + "<link rel='stylesheet' type='text/css' href='common.css'/>";
+    html += "<script src=\"https://cdn.tailwindcss.com\"></script>";
     html = html + "</head>";
 
     // Add the body
@@ -70,11 +71,13 @@ public class PageST2A implements Handler {
     html = html + """
         <p>Subtask 2.A page content</p>
         """;
-    html += "<form id='query-form' action='page2A.html' method='post' onsubmit='return validateForm();'>\r\n";//
-    html += "<label for='ageFilter'>Select Age Range:</label>\r\n" + //
-            "    <select name='ageFilter' id='ageFilter'>\r\n" + //
-            "        <option value='Default' selected>Default</option>\r\n" + //
-            "        <option value='0_4'>0-4 years</option>\r\n" + //
+
+    html += "<div class='p-4 max-w-md mx-auto'>\r\n" + //
+            "    <form id='query-form' action='page2A.html' method='post' onsubmit='return validateForm();'>\r\n" + //
+            "        <div class='mb-4'>\r\n" + //
+            "            <label for='ageFilter' class='text-blue-500'>Select Age Range:</label>\r\n" + //
+            "            <select name='ageFilter' id='ageFilter' class='bg-blue-100 p-2 rounded'>\r\n" + //
+           "        <option value='0_4'>0-4 years</option>\r\n" + //
             "        <option value='5_9'>5-9 years</option>\r\n" + //
             "        <option value='10_14'>10-14 years</option>\r\n" + //
             "        <option value='15_19'>15-19 years</option>\r\n" + //
@@ -88,15 +91,15 @@ public class PageST2A implements Handler {
             "        <option value='55_59'>55-59 years</option>\r\n" + //
             "        <option value='60_64'>60-64 years</option>\r\n" + //
             "        <option value='65+'>65+</option>\r\n" + //
-            "    </select>\r\n" + //
-            "    <br><br>\r\n" + //
-            "";     
-
-    html += " <!-- Health Condition Filter -->\r\n" + //
-            "    <label for='health_condition'>Health Condition:</label>\r\n" + //
-            "    <select name='health_condition' id='health_condition'>\r\n"; //
-    html += "    <option value='Default' selected>Default</option>\r\n" + //
-            "    <option value='arthritis'>Arthritis</option>\r\n" + //
+            "            </select>\r\n" + //
+            "        </div>\r\n" + //
+            "\r\n" + //
+            "        <!-- Health Condition Filter -->\r\n" + //
+            "        <div class='mb-4'>\r\n" + //
+            "            <label for='health_condition' class='text-blue-500'>Health Condition:</label>\r\n" + //
+            "            <select name='health_condition' id='health_condition' class='bg-blue-100 p-2 rounded'>\r\n" + //
+           "    <option value='arthritis'>Arthritis</option>\r\n" + //
+            "    <option value='Default' selected>Default</option>\r\n" + //
             "    <option value='arthritis_non'>Arthritis (Non-Indigenous)</option>\r\n" + //
             "    <option value='asthma'>Asthma</option>\r\n" + //
             "    <option value='asthma_non'>Asthma (Non-Indigenous)</option>\r\n" + //
@@ -118,46 +121,137 @@ public class PageST2A implements Handler {
             "    <option value='stroke_non'>Stroke (Non-Indigenous)</option>\r\n" + //
             "    <option value='other'>Other</option>\r\n" + //
             "    <option value='other_non'>Other (Non-Indigenous)</option>" + 
-            "    </select>\r\n";        
-    html +=        "    <br><br> ";
+            "            </select>\r\n" + //
+            "        </div>\r\n" + //
+            "\r\n" + //
+            "        <!-- Sort Field -->\r\n" + //
+            "        <div class='mb-4'>\r\n" + //
+            "            <label for='sortField' class='text-blue-500'>Sort By:</label>\r\n" + //
+            "            <select name='sortField' id='sortField' class='bg-blue-100 p-2 rounded'>\r\n" + //
+            "                <option value='lga_code'>LGA Code</option>\r\n" + //
+            "                <option value='age_group'>Age Group</option>\r\n" + //
+            "            </select>\r\n" + //
+            "        </div>\r\n" + //
+            "\r\n" + //
+            "        <!-- Lga Name -->\r\n" + //
+            "        <div class='mb-4'>\r\n" + //
+            "            <label for='LgaName' class='text-blue-500'>Enter LGA Name:</label>\r\n" + //
+            "            <input type='text' name='LgaName' class='bg-blue-100 p-2 rounded'>\r\n" + //
+            "        </div>\r\n" + //
+            "\r\n" + //
+            "        <!-- Order By -->\r\n" + //
+            "        <div class='mb-4'>\r\n" + //
+            "            <label for='order' class='text-blue-500'>Order:</label>\r\n" + //
+            "            <select name='order' class='bg-blue-100 p-2 rounded'>\r\n" + //
+            "                <option value='ASC'>Ascending</option>\r\n" + //
+            "                <option value='DESC'>Descending</option>\r\n" + //
+            "            </select>\r\n" + //
+            "        </div>\r\n" + //
+            "\r\n" + //
+            "        <!-- Indigenous Status -->\r\n" + //
+            "        <div class='mb-4'>\r\n" + //
+            "            <label for='indigenous_status' class='text-blue-500'>Indigenous Status:</label>\r\n" + //
+            "            <select name='indigenous_status' id='indigenous_status' class='bg-blue-100 p-2 rounded'>\r\n" + //
+            "                <option value='Indigenous'>Indigenous</option>\r\n" + //
+            "                <option value='NonIndigenous'>Non-Indigenous</option>\r\n" + //
+            "                <option value='NotStated'>Not stated</option>\r\n" + //
+            "            </select>\r\n" + //
+            "        </div>\r\n" + //
+            "\r\n" + //
+            "        <div class='mt-4'>\r\n" + //
+            "            <input type='submit' value='Submit Query' class='bg-blue-500 text-white p-2 rounded cursor-pointer'>\r\n" + //
+            "        </div>\r\n" + //
+            "    </form>\r\n" + //
+            "</div>\r\n" + //
+            "";    
+    // html += "<form id='query-form' action='page2A.html' method='post' onsubmit='return validateForm();'>\r\n";//
+    // html += "<label for='ageFilter'>Select Age Range:</label>\r\n" + //
+    //         "    <select name='ageFilter' id='ageFilter'>\r\n" + //
+    //         // "        <option value='Default' selected>Default</option>\r\n" + //
+    //         "        <option value='0_4'>0-4 years</option>\r\n" + //
+    //         "        <option value='5_9'>5-9 years</option>\r\n" + //
+    //         "        <option value='10_14'>10-14 years</option>\r\n" + //
+    //         "        <option value='15_19'>15-19 years</option>\r\n" + //
+    //         "        <option value='20_24'>20-24 years</option>\r\n" + //
+    //         "        <option value='25_29'>25-29 years</option>\r\n" + //
+    //         "        <option value='30_34'>30-34 years</option>\r\n" + //
+    //         "        <option value='35_39'>35-39 years</option>\r\n" + //
+    //         "        <option value='40_44'>40-44 years</option>\r\n" + //
+    //         "        <option value='45_49'>45-49 years</option>\r\n" + //
+    //         "        <option value='50_54'>50-54 years</option>\r\n" + //
+    //         "        <option value='55_59'>55-59 years</option>\r\n" + //
+    //         "        <option value='60_64'>60-64 years</option>\r\n" + //
+    //         "        <option value='65+'>65+</option>\r\n" + //
+    //         "    </select>\r\n" + //
+    //         "    <br><br>\r\n" + //
+    //         "";     
 
-    // html += " <!-- Gender Filter -->\r\n" + //
-    //         "    <label for='genderFilter'>Select Gender:</label>\r\n" + //
-    //         "    <select name='genderFilter' id='genderFilter'>\r\n" + //
-    //         "        <option value='male'>Male</option>\r\n" + //
-    //         "        <option value='female'>Female</option>\r\n" + //
+    // html += " <!-- Health Condition Filter -->\r\n" + //
+    //         "    <label for='health_condition'>Health Condition:</label>\r\n" + //
+    //         "    <select name='health_condition' id='health_condition'>\r\n"; //
+    // html += "    <option value='arthritis'>Arthritis</option>\r\n" + //
+    //         "    <option value='Default' selected>Default</option>\r\n" + //
+    //         "    <option value='arthritis_non'>Arthritis (Non-Indigenous)</option>\r\n" + //
+    //         "    <option value='asthma'>Asthma</option>\r\n" + //
+    //         "    <option value='asthma_non'>Asthma (Non-Indigenous)</option>\r\n" + //
+    //         "    <option value='cancer'>Cancer</option>\r\n" + //
+    //         "    <option value='cancer_non'>Cancer (Non-Indigenous)</option>\r\n" + //
+    //         "    <option value='dementia'>Dementia</option>\r\n" + //
+    //         "    <option value='dementia_non'>Dementia (Non-Indigenous)</option>\r\n" + //
+    //         "    <option value='diabetes'>Diabetes</option>\r\n" + //
+    //         "    <option value='diabetes_non'>Diabetes (Non-Indigenous)</option>\r\n" + //
+    //         "    <option value='heartdisease'>Heart Disease</option>\r\n" + //
+    //         "    <option value='heartdisease_non'>Heart Disease (Non-Indigenous)</option>\r\n" + //
+    //         "    <option value='kidneydisease'>Kidney Disease</option>\r\n" + //
+    //         "    <option value='kidneydisease_non'>Kidney Disease (Non-Indigenous)</option>\r\n" + //
+    //         "    <option value='lungcondition'>Lung Condition</option>\r\n" + //
+    //         "    <option value='lungcondition_non'>Lung Condition (Non-Indigenous)</option>\r\n" + //
+    //         "    <option value='mentalhealth'>Mental Health</option>\r\n" + //
+    //         "    <option value='mentalhealth_non'>Mental Health (Non-Indigenous)</option>\r\n" + //
+    //         "    <option value='stroke'>Stroke</option>\r\n" + //
+    //         "    <option value='stroke_non'>Stroke (Non-Indigenous)</option>\r\n" + //
+    //         "    <option value='other'>Other</option>\r\n" + //
+    //         "    <option value='other_non'>Other (Non-Indigenous)</option>" + 
+    //         "    </select>\r\n";        
+    // html +=        "    <br><br> ";
+
+    // // html += " <!-- Gender Filter -->\r\n" + //
+    // //         "    <label for='genderFilter'>Select Gender:</label>\r\n" + //
+    // //         "    <select name='genderFilter' id='genderFilter'>\r\n" + //
+    // //         "        <option value='male'>Male</option>\r\n" + //
+    // //         "        <option value='female'>Female</option>\r\n" + //
+    // //         "    </select>\r\n" + //
+    // //         "    <br><br>";
+    
+    // html += " <!-- Sort Field -->\r\n" + //
+    //         "    <label for='sortField'>Sort By:</label>\r\n" + //
+    //         "    <select name='sortField' id='sortField'>\r\n" + //
+    //         "        <option value='lga_code'>LGA Code</option>\r\n" + //
+    //         "        <option value='age_group'>Age Group</option>\r\n" + //
     //         "    </select>\r\n" + //
     //         "    <br><br>";
-    
-    html += " <!-- Sort Field -->\r\n" + //
-            "    <label for='sortField'>Sort By:</label>\r\n" + //
-            "    <select name='sortField' id='sortField'>\r\n" + //
-            "        <option value='lga_code'>LGA Code</option>\r\n" + //
-            "        <option value='age_group'>Age Group</option>\r\n" + //
-            "    </select>\r\n" + //
-            "    <br><br>";
 
-    html += "<!-- Lga Name -->\r\n" + //
-            "    <label for='LgaName'>Enter LGA Name:</label>\r\n" + //
-            "  <input type='text' name = 'LgaName'>"+
-            "    <br><br>";
-    html += " <!-- Order By -->\r\n" + //
-            "    <label for='order'>Order:</label>\r\n" + //
-            "    <select name='order'>\r\n" + //
-            "        <option value='ASC'>Ascending </option>\r\n" + //
-            "        <option value='DESC'>Descending </option>\r\n" + //
-            "    </select>\r\n" + //
-            "    <br><br>";
-    html += " <!-- Indigenous Status -->\r\n" + //
-            "    <label for='indigenous_status'>Indigenous Status:</label>\r\n" + //
-            "    <select name='indigenous_status' id='indigenous_status'>\r\n" + //
-            "        <option value='Indigenous'>Indigenous</option>\r\n" + //
-            "        <option value='NonIndigenous'>Non-Indigenous</option>\r\n" + //
-            "        <option value='NotStated'>Not stated</option>\r\n" + //
-            "    </select>\r\n" + //
-            "    <br><br>";
+    // html += "<!-- Lga Name -->\r\n" + //
+    //         "    <label for='LgaName'>Enter LGA Name:</label>\r\n" + //
+    //         "  <input type='text' name = 'LgaName'>"+
+    //         "    <br><br>";
+    // html += " <!-- Order By -->\r\n" + //
+    //         "    <label for='order'>Order:</label>\r\n" + //
+    //         "    <select name='order'>\r\n" + //
+    //         "        <option value='ASC'>Ascending </option>\r\n" + //
+    //         "        <option value='DESC'>Descending </option>\r\n" + //
+    //         "    </select>\r\n" + //
+    //         "    <br><br>";
+    // html += " <!-- Indigenous Status -->\r\n" + //
+    //         "    <label for='indigenous_status'>Indigenous Status:</label>\r\n" + //
+    //         "    <select name='indigenous_status' id='indigenous_status'>\r\n" + //
+    //         "        <option value='Indigenous'>Indigenous</option>\r\n" + //
+    //         "        <option value='NonIndigenous'>Non-Indigenous</option>\r\n" + //
+    //         "        <option value='NotStated'>Not stated</option>\r\n" + //
+    //         "    </select>\r\n" + //
+    //         "    <br><br>";
 
-    html += "<input type='submit' value='Submit Query'>" + "</form>";
+    // html += "<input type='submit' value='Submit Query'>" + "</form>";
 
     html += "<script>\r\n" + //
             "function validateForm() {\r\n" + //
@@ -178,10 +272,15 @@ public class PageST2A implements Handler {
     html = html + "</div>";
     html += "<div>";
     // && context.formParam("health_condition") == "Default"
-    if (context.formParam("LgaName") != null && context.formParams("indigenous_status") != null ) {
+    boolean ageData = false;
+    String validationData =  context.formParam("health_condition");
+    if(validationData == null || validationData.equals("Default")){
+        ageData = true;
+    }
+    if (context.formParam("LgaName") != null && context.formParams("indigenous_status") != null && ageData == true) {
         // String age = context.formParam("ageFilter");
         // List<String> gender = context.formParams("genderFilter");
-     
+        String age = context.formParam("ageFilter");
         String indigenous_status = context.formParam("indigenous_status");
         String order = context.formParam("order");
         String lgaName = context.formParam("LgaName");
@@ -189,20 +288,24 @@ public class PageST2A implements Handler {
         
         ArrayList<ageCount> filteredData = jdbc.FilterAgeCount(sortField, indigenous_status , lgaName , order );
         
-        if(filteredData.size() > 0){
-            html += "<table>";
-        // Create table headers
-        html += "<tr><th>Year</th><th>Age Range</th><th>Sum</th>" +"</tr>";
-        for (ageCount at : filteredData) {
-            // Add data to the table
-            html += "<tr><td>" + at.getAgeCount() + "</td><td>" + at.getCount() + "</td><td>" +"</tr>";
-        }
-        html += "</table>";
-        }else {
-            html += "<h2>No Data Found !!</h2>"; 
+        if (filteredData.size() > 0) {
+            html += "<table class='border border-collapse border-blue-500 m-4'>";
+            // Create table headers
+            html += "<tr class='bg-blue-500 text-white'><th class='p-2'>Year</th><th class='p-2'>Age Range</th></tr>";
+            for (ageCount at : filteredData) {
+                // Add data to the table
+                html += "<tr class='border'><td class='p-2'>" + at.getAgeCount() + "</td><td class='p-2'>" + at.getCount() + "</td></tr>";
+            }
+            html += "</table>";
+        } else {
+            html += "<h2 class='text-red-500 text-center mt-4'>No Data Found !!</h2>";
         }
         
+        
     // Footer
+    }else if(context.formParams("health_condition")!= null && context.formParams("ageFilter")!= null && context.formParams("indigenous_status") != null ){
+
+
     }
     html += "</div>";
     // Footer

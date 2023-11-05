@@ -65,6 +65,7 @@ private boolean reset = false;
 
         // Add some CSS (external file)
         html = html + "<link rel='stylesheet' type='text/css' href='common.css' />";
+        html += "<script src=\"https://cdn.tailwindcss.com\"></script>";
         html = html + "</head>";
 
         // Add the body
@@ -90,78 +91,61 @@ private boolean reset = false;
             </div>
         """;
 
-        // Add Div for page Content
+        
+
+
+                
+        // Start Form
         html = html + "<div class='content'>";
         html = html + "<div class='contentTHREEB'>";
 
+        // Start Form
+        html += "<form action='/page3B.html' method='post' class='bg-white p-4 shadow-md rounded-md'>";
 
-        
-// Start Form
-        html += "<form action='/page3B.html' method='post'>";
-
-/*
- * Select Data Set
- */
-        if(DataSet == null){
-            html += "<p></p><label for = 'DataChoose'>Choose Data Set to View: </label>";
-            html += "<select name ='DataChoose' id = 'DataChoose'>";
-            html += "<option value = 'AgeDemographics'>Age Demographics</option>" +
-            "<option value = 'MedicalConditions'>Long Term Health Conditions</option>" + 
-            "<option value = 'SchoolCompletion'>School Completion Level</option>" + 
-            "<option value = 'NonSchoolCompletion'>Non School Completion Level</option>";
-            
-            html += "</select><br></br>";
-        } 
-        else{
-            html += "<p></p><label for = 'DataChoose'>Selected Data Set to View: " + DataSet +"</label><br></br>";
+        // Select Data Set
+        if (DataSet == null) {
+            html += "<div class='mb-4'><label for='DataChoose' class='block text-gray-700 text-sm font-bold mb-2'>Choose Data Set to View:</label>";
+            html += "<select name='DataChoose' id='DataChoose' class='block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'>";
+            html += "<option value='AgeDemographics'>Age Demographics</option>" +
+                    "<option value='MedicalConditions'>Long Term Health Conditions</option>" +
+                    "<option value='SchoolCompletion'>School Completion Level</option>" +
+                    "<option value='NonSchoolCompletion'>Non School Completion Level</option>";
+            html += "</select></div>";
+        } else {
+            html += "<label for='DataChoose' class='block text-gray-700 text-sm font-bold mb-2'>Selected Data Set to View: " + DataSet + "</label>";
         }
-
-        if(context.formParam("DataChoose") != null && DataSet == null){
+        if (context.formParam("DataChoose") != null && DataSet == null) {
             DataSet = context.formParam("DataChoose");
             proceed = true;
-        }
-        else if(DataSet == null){
+        } else if (DataSet == null) {
             proceed = false;
         }
-
-        html += "<button type='submit'>View Information</button>";
-
-
+        
+        html += "<button type='submit' class='bg-blue-500 text-white font-bold py-2 px-4 rounded-md'>View Information</button>";
         html += "</form>";
-
-
-// Start Form
-if(DataSet != null){
-        html += "<form action='/page3B.html' method='post'>";
-
         
-
-/*
- * Select LGA
- */
-        if(LGAcode == null){
-            html += "<label for = 'LGACsort'>Choose LGA Code to Investigate: </label>";
-            html += "<input type = 'number' id = 'LGACsort' name = 'LGACsort'";
-            html += "<p></p>";
-        }
-        else{
-            html += "<label for = 'LGACsort'>Chosen LGA Code to Investigate: " + LGAcode + "</label><p></p>";
-        }
-/*
-        html += "<p>OR</p>";
+        // Start Form
+        if (DataSet != null) {
+            html += "<form action='/page3B.html' method='post' class='bg-white p-4 shadow-md rounded-md'>";
         
-        html += "<label for = 'LGANsort'>Choose LGA Name to Sort By: </label>";
-        html += "<input type = 'text' id = 'LGANsort' name = 'LGANsort'";
-        html += "<br></br>";
-*/
-        if(context.formParam("LGACsort") != null){
-            LGAcode = context.formParam("LGACsort");
-            proceed = true;
-        }
-        else if(LGAcode == null){
-            proceed = false;
-        }
-
+            // Select LGA
+            if (LGAcode == null) {
+                html += "<div class='mb-4'>";
+                html += "<label for='LGACsort' class='block text-gray-700 text-sm font-bold mb-2'>Choose LGA Code to Investigate:</label>";
+                html += "<input type='number' id='LGACsort' name='LGACsort' class='block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'>";
+                html += "</div>";
+            } else {
+                html += "<label for='LGACsort' class='block text-gray-700 text-sm font-bold mb-2'>Chosen LGA Code to Investigate: " + LGAcode + "</label>";
+            }
+        
+            // You can add the "OR" section for "LGANsort" in a similar manner if needed.
+        
+            if (context.formParam("LGACsort") != null) {
+                LGAcode = context.formParam("LGACsort");
+                proceed = true;
+            } else if (LGAcode == null) {
+                proceed = false;
+            }
 
 
 
@@ -170,48 +154,48 @@ if(DataSet != null){
 /*
  * Select Year
  */
-    if(!DataSet.equals("MedicalConditions")){
-        if(year ==null){
-            html += "<label for = 'YearChoose'>Choose Year to View By: </label>";
-            html += "<input type = 'radio' name = 'year' id = '2016' value = '2016'/>";
-            html += "<label for = '2016'>2016</label>";
-            html += "<input type = 'radio' name = 'year' id = '2021' value = '2021'/>";
-            html += "<label for = '2021'>2021</label><p></p>";
-        }
-        else{
-            html += "<label for = 'YearChoose'>Selected Year to View By: " + year + "</label><p></p>";
-        }
-
-        if(context.formParam("year") != null){
-            year = context.formParam("year");
-            proceed = true;
-        }
-        else if(year == null){
-            proceed = false;
-        }
+if (!DataSet.equals("MedicalConditions")) {
+    if (year == null) {
+        html += "<label for='YearChoose' class='block text-gray-700 text-sm font-bold mb-2'>Choose Year to View By:</label>";
+        html += "<div class='mb-4'>";
+        html += "<input type='radio' name='year' id='2016' value='2016' class='mr-1'>";
+        html += "<label for='2016' class='text-gray-600 font-medium'>2016</label>";
+        html += "<input type='radio' name='year' id='2021' value='2021' class='ml-4 mr-1'>";
+        html += "<label for='2021' class='text-gray-600 font-medium'>2021</label>";
+        html += "</div>";
+    } else {
+        html += "<label for='YearChoose' class='block text-gray-700 text-sm font-bold mb-2'>Selected Year to View By: " + year + "</label><p></p>";
     }
+
+    if (context.formParam("year") != null) {
+        year = context.formParam("year");
+        proceed = true;
+    } else if (year == null) {
+        proceed = false;
+    }
+}
+
 
         
 
 /*
  * Select Number of Similar LGAs
- */
-        if(numSimilarLGAs == null){
-            html += "<label for = 'LGAnum'>Choose the Number of LGA's to Return: </label>";
-            html += "<input type = 'number' id = 'LGAnum' name = 'LGAnum'";
+        */
+        if (numSimilarLGAs == null) {
+            html += "<label for='LGAnum' class='block text-gray-700 text-sm font-bold mb-2'>Choose the Number of LGAs to Return:</label>";
+            html += "<input type='number' id='LGAnum' name='LGAnum' class='w-full border rounded px-3 py-2 mt-2'>";
             html += "<p></p>";
-        }
-        else{
-            html += "<label for = 'LGAnum'>Chosen Number of LGA's to Return: " + numSimilarLGAs + "</label><p></p>";
+        } else {
+            html += "<label for='LGAnum' class='block text-gray-700 text-sm font-bold mb-2'>Chosen Number of LGAs to Return: " + numSimilarLGAs + "</label><p></p>";
         }
 
-        if(context.formParam("LGAnum") != null){
+        if (context.formParam("LGAnum") != null) {
             numSimilarLGAs = context.formParam("LGAnum");
             proceed = true;
-        }
-        else if(numSimilarLGAs == null){
+        } else if (numSimilarLGAs == null) {
             proceed = false;
         }
+
 
         
 
@@ -219,58 +203,56 @@ if(DataSet != null){
  * Select Constraints
  */
     // Indigenous Stat
-        if(IndigenousStat == null){
-            html += "<label for = 'indigenousStat'>Choose Indigenous Status: </label>";
-            html += "<select name = 'indigenousStat' id = 'indigenousStat'>"
-            + "<option value = 'All'>All</option>"
-            + "<option value = 'Indigenous'>Indigenous</option>"
-            + "<option value = 'NonIndigenous'>Non Indigenous</option>"
-            + "<option value = 'NotStated'>Not Stated</option>"
-            + "</select><br></br>";
-        }
-        else{
-            html += "<label for = 'indigenousStat'>Selected Indigenous Status: " + IndigenousStat + "</label><br></br>";
-        }
-
-        if(context.formParam("indigenousStat") != null){
-            IndigenousStat = context.formParam("indigenousStat");
-            proceed = true;
-        }
-        else if(IndigenousStat == null){
-            IndigenousStat = "All";
-        }
+    if (IndigenousStat == null) {
+        html += "<label for='indigenousStat' class='block text-gray-700 text-sm font-bold mb-2'>Choose Indigenous Status:</label>";
+        html += "<select name='indigenousStat' id='indigenousStat' class='w-full border rounded px-3 py-2 mt-2'>";
+        html += "<option value='All'>All</option>";
+        html += "<option value='Indigenous'>Indigenous</option>";
+        html += "<option value='NonIndigenous'>Non Indigenous</option>";
+        html += "<option value='NotStated'>Not Stated</option>";
+        html += "</select><br></br>";
+    } else {
+        html += "<label for='indigenousStat' class='block text-gray-700 text-sm font-bold mb-2'>Selected Indigenous Status: " + IndigenousStat + "</label><br></br>";
+    }
+    
+    if (context.formParam("indigenousStat") != null) {
+        IndigenousStat = context.formParam("indigenousStat");
+        proceed = true;
+    } else if (IndigenousStat == null) {
+        IndigenousStat = "All";
+    }
+    
 
     // Gender
-        if(Gender == null){
-            html += "<label for = 'Gender'>Choose Gender: </label>";
-            html += "<select name = 'Gender' id = 'Gender'>"
-            + "<option value = 'All'>All</option>"
-            + "<option value = 'M'>Male</option>"
-            + "<option value = 'F'>Female</option>"
-            + "</select>";
-        }
-        else{
-            html += "<label for = 'Gender'>Selected Gender: " + Gender + "</label>";
-        }
-
-        if(context.formParam("Gender") != null){
-            Gender = context.formParam("Gender");
-            proceed = true;
-        }
-        else if(Gender == null){
-            Gender = "All";
-        }
-
+    if (Gender == null) {
+        html += "<label for='Gender' class='block text-gray-700 text-sm font-bold mb-2'>Choose Gender:</label>";
+        html += "<select name='Gender' id='Gender' class='w-full border rounded px-3 py-2'>";
+        html += "<option value='All'>All</option>";
+        html += "<option value='M'>Male</option>";
+        html += "<option value='F'>Female</option>";
+        html += "</select>";
+    } else {
+        html += "<label for='Gender' class='block text-gray-700 text-sm font-bold mb-2'>Selected Gender: " + Gender + "</label>";
+    }
+    
+    if (context.formParam("Gender") != null) {
+        Gender = context.formParam("Gender");
+        proceed = true;
+    } else if (Gender == null) {
+        Gender = "All";
+    }
+    
 
 
         // Specific to Dataset
    if(DataSet != null){
     //Give Age Demographic Range
         if(DataSet.equals("AgeDemographics")){
-            html += "<p><label for = 'AgeDemo'>Age Range: </label>"
-            + "<input type = 'number' id = 'AgeDemoMin' name = 'AgeDemoMin'>"
-            + " - "
-            + "<input type = 'number' id = 'AgeDemoMax' name = 'AgeDemoMax'></p>";
+            html += "<p><label for='AgeDemo' class='block text-gray-700 text-sm font-bold mb-2'>Age Range:</label>"
+            + "<div class='flex'>";
+        html += "<input type='number' id='AgeDemoMin' name='AgeDemoMin' class='w-1/2 border rounded-l px-3 py-2' placeholder='Min'>";
+        html += "<input type='number' id='AgeDemoMax' name='AgeDemoMax' class='w-1/2 border rounded-r px-3 py-2' placeholder='Max'>";
+        html += "</div></p>";
             proceed = true;
         }
 
@@ -278,10 +260,11 @@ if(DataSet != null){
 
     //Give School Completion Range
         else if(DataSet.equals("SchoolCompletion")){
-            html += "<p><label for = 'SchoolRange'>School Year(8-12): </label>"
-            + "<input type = 'number' id = 'SchoolYMin' name = 'SchoolYMin'>"
-            + " - "
-            + "<input type = 'number' id = 'SchoolYMax' name = 'SchoolYMax'></p>";
+            html += "<p><label for='SchoolRange' class='block text-gray-700 text-sm font-bold mb-2'>School Year(8-12):</label>"
+        + "<div class='flex'>";
+    html += "<input type='number' id='SchoolYMin' name='SchoolYMin' class='w-1/2 border rounded-l px-3 py-2' placeholder='Min'>";
+    html += "<input type='number' id='SchoolYMax' name='SchoolYMax' class='w-1/2 border rounded-r px-3 py-2' placeholder='Max'>";
+    html += "</div></p>";
             proceed = true;
 
         }
@@ -289,25 +272,24 @@ if(DataSet != null){
     //Give Medical Conditions Options
         else if(DataSet.equals("MedicalConditions")){
             if(specificConstraint == null){
-                html += "<p><label for = 'MedCon'>Long Term Medical Condition: </label>"
-                + "<select name = 'MedCon' id = 'MedCon'>"
-                + "<option value = 'All'>All</option>"
-                + "<option value = 'Arthritis'>Arthritis</option>"
-                + "<option value = 'Asthma'>Asthma</option>"
-                + "<option value = 'Cancer'>Cancer</option>"
-                + "<option value = 'Dementia'>Dementia</option>"
-                + "<option value = 'Diabetes'>Diabetes</option>"
-                + "<option value = 'HeartDisease'>Heart Disease</option>"
-                + "<option value = 'KidneyDisease'>Kidney Disease</option>"
-                + "<option value = 'LungCondition'>Lung Condition</option>"
-                + "<option value = 'MentalHealth'>Mental Health</option>"
-                + "<option value = 'Other'>Other</option>"
-                + "<option value = 'Stroke'>Stroke</option>"
-                + "</select>"
-                ;
+                html += "<p class='mb-2'><label for='MedCon' class='block text-gray-700 text-sm font-bold mb-2'>Long Term Medical Condition:</label>"
+                + "<select name='MedCon' id='MedCon' class='w-full border rounded px-3 py-2 text-gray-700'>";
+            html += "<option value='All'>All</option>"
+                + "<option value='Arthritis'>Arthritis</option>"
+                + "<option value='Asthma'>Asthma</option>"
+                + "<option value='Cancer'>Cancer</option>"
+                + "<option value='Dementia'>Dementia</option>"
+                + "<option value='Diabetes'>Diabetes</option>"
+                + "<option value='HeartDisease'>Heart Disease</option>"
+                + "<option value='KidneyDisease'>Kidney Disease</option>"
+                + "<option value='LungCondition'>Lung Condition</option>"
+                + "<option value='MentalHealth'>Mental Health</option>"
+                + "<option value='Other'>Other</option>"
+                + "<option value='Stroke'>Stroke</option>"
+                + "</select>";
             }
             else{
-                html += "<p><label for = 'MedCon'>Long Term Medical Condition: " + specificConstraint + "</label>";
+                html += "<p><label for='MedCon' class='block text-gray-700 text-sm font-bold mb-2'>Long Term Medical Condition: " + specificConstraint + "</label>";
             }
 
             if(context.formParam("MedCon") != null){
@@ -323,16 +305,16 @@ if(DataSet != null){
     //Give Non School Completion Options
         else if(DataSet.equals("NonSchoolCompletion")){
             if(specificConstraint == null){
-                html += "<p><label for = 'NonSchoolOpt'>Non School Completion: </label>"
-                + "<select name = 'NonSchoolOpt' id = 'NonSchoolOpt'>"
-                + "<option value = 'All'>All</option>"
-                + "<option value = 'adip_dip'>Advanced Diploma and Diploma Level</option>"
-                + "<option value = 'bd'>Bachelor Degree Level</option>"
-                + "<option value = 'ct_i_ii'>Certificate I & II Level</option>"
-                + "<option value = 'ct_iii_iv'>Certificate III & IV Level</option>"
-                + "<option value = 'pd_gd_gc'>Postgraduate Degree and Graduate Level</option>"
-                + "</select>"
-                ;
+                html += "<p><label for='NonSchoolOpt' class='block text-sm font-medium text-gray-700'>Non School Completion:</label>";
+                html += "<select name='NonSchoolOpt' id='NonSchoolOpt' class='mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm sm:leading-5'>";
+                html += "<option value='All'>All</option>";
+                html += "<option value='adip_dip'>Advanced Diploma and Diploma Level</option>";
+                html += "<option value='bd'>Bachelor Degree Level</option>";
+                html += "<option value='ct_i_ii'>Certificate I & II Level</option>";
+                html += "<option value='ct_iii_iv'>Certificate III & IV Level</option>";
+                html += "<option value='pd_gd_gc'>Postgraduate Degree and Graduate Level</option>";
+                html += "</select>";
+
             }
             else{
                 String NS;
@@ -377,8 +359,9 @@ if(DataSet != null){
 
 
 // Reset Inputs
-        html += "<p></p><input type = 'radio' name = 'Reset' id = 'Reset' value = 'reset'>"
-        + "<label for = 'Reset'>Reset Inputs</label>";
+            html += "<p></p><input type='radio' name='Reset' id='Reset' value='reset' class='form-radio text-indigo-600 border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm sm:leading-5'>";
+            html += "<label for='Reset' class='ml-2 text-sm text-gray-700'>Reset Inputs</label>";
+
 
         if(context.formParam("Reset") != null){
             reset = true;
