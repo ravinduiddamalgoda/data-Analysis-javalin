@@ -243,6 +243,7 @@ private String generateStaticHtmlContent() {
             <div class="container mt-5">
                 <!-- Dynamic Content goes here -->
                 <!-- Divs that will hold the charts -->
+                <div class = "" > <h1> Insightful Data for Informed Decisions</h1></div>
                 <div id="total_population_chart_div" class="chart-container"></div>
                 <div id="state_chart_div" class="chart-container"></div>
                 <div id="lga_chart_div" class="chart-container"></div>

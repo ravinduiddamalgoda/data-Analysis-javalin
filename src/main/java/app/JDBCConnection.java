@@ -923,6 +923,11 @@ public ArrayList<Education> getSchool(String LGAcode, String numSimilarLGAs, Str
         }else if(genderFilter.toUpperCase().equals("FEMALE")){
              gender = "F";
         }
+
+
+        System.out.println(ageRangeFilter);
+        System.out.println(genderFilter);
+        System.out.println(year);
         try {
             // Connect to the JDBC database
             connection = DriverManager.getConnection(DATABASE);
@@ -956,7 +961,7 @@ public ArrayList<Education> getSchool(String LGAcode, String numSimilarLGAs, Str
                 table.add(Recent);
             }
             System.out.println(table.size());
-    
+            System.out.println("Data Got Successfully");
         } catch (SQLException e) {
             System.err.println(e.getMessage());
             System.out.println("Error Occured HEre ");
@@ -1048,7 +1053,7 @@ public ArrayList<Education> getSchool(String LGAcode, String numSimilarLGAs, Str
             statement.setQueryTimeout(30);
             
             System.out.println(lgaName);
-            System.out.println(sortField);
+            System.out.println(health_condition);
             System.out.println(indigenous_status);
             
             String query = "Select \r\n" + //
@@ -1060,16 +1065,16 @@ public ArrayList<Education> getSchool(String LGAcode, String numSimilarLGAs, Str
                     "ON m.LGAcode = l.LGAcode\r\n" + //
                     "Where \r\n" + //
                     "l.name = '"+lgaName+"'\r\n" + //
-                    "AND a.Indigenous_Status = '"+indigenous_status+"'\r\n" + //
+                    "AND m.Indigenous_Status = '"+indigenous_status+"'\r\n" + //
                     "AND m.Condition = '"+health_condition+"'\r\n" +
                     "Group by m.Condition, m.Indigenous_Status\r\n";
     
-            if (order != null && !order.isEmpty()) {
-                query += "ASC";
-                // query += "ORDER BY a.year";
-            } else {
-                query += order;
-            }
+            // if (order != null && !order.isEmpty()) {
+            //     query += "ASC";
+            //     // query += "ORDER BY a.year";
+            // } else {
+            //     query += order;
+            // }
     
             ResultSet results = statement.executeQuery(query);
     

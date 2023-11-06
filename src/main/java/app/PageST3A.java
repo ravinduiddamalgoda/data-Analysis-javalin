@@ -92,8 +92,9 @@ public class PageST3A implements Handler {
                 "</script>\r\n" + //
                 "\r\n" ;
 
-                html += "<label for='ageFilter' class='block text-sm font-medium text-gray-700'>Select Age Range:</label>";
+                html += "<label for='ageFilter' class='block text-sm font-medium text-blue-500'>Select Age Range:</label>";
                 html += "<select name='ageFilter' id='ageFilter' class='block mt-1 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:border-indigo-300 sm:text-sm'>";
+                html += "<option value='Default' selected>Default</option>\r\n";
                 html += "<option value='0_4'>0-4 years</option>";
                 html += "<option value='5_9'>5-9 years</option>";
                 html += "<option value='10_14'>10-14 years</option>";
@@ -120,7 +121,7 @@ public class PageST3A implements Handler {
             "            </select>\r\n" + //
             "        </div>\r\n";
     
-            html += "<label for='genderFilter' class='block text-sm font-medium text-gray-700'>Gender Filter:</label><br>";
+            html += "<label for='genderFilter' class='block text-sm font-medium text-blue-500'>Gender Filter:</label><br>";
             html += "<select id='genderFilter' name='genderFilter' class='block mt-1 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:border-indigo-300 sm:text-sm'>";
             html += "<option value='all'>All</option>";
             html += "<option value='male'>Male</option>";
@@ -132,22 +133,31 @@ public class PageST3A implements Handler {
                     "            <label for='year' class='text-blue-500'>Enter the year:</label>\r\n" + //
                     "            <select name='year' id='sortField' class='bg-blue-100 p-2 rounded'>\r\n" + //
                     "                <option value='2016'>2016</option>\r\n" + //
-                    "                <option value='2020'>2020</option>\r\n" + //
+                    "                <option value='2021'>2021</option>\r\n" + //
                     "            </select>\r\n" + //
                     "        </div>\r\n";
 
-                    html += "<button type='submit' class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>Apply Filters</button>";
+                    html += "<input type='submit' class='bg-blue-500 text-white p-2 rounded cursor-pointer' value='Apply Filters'>";
 
                 html += "</form> ";
 
+        
             
-
+                boolean ageData = false;
+                String validationData =  context.formParam("ageFilter");
+                if(validationData != null && !validationData.equals("Default")){
+                    ageData = true;
+                }
         // Close Content div
         html = html + "</div>";
-        if (context.formParam("ageFilter") != null && context.formParams("genderFilter") != null) {
+        if (context.formParams("ageFilter") != null && context.formParams("genderFilter") != null && context.formParams("year") != null ) {
             String age = context.formParam("ageFilter");
             String year = context.formParam("year");
             String gender = context.formParam("genderFilter");
+            System.out.println("Function Called");
+            System.out.println(gender);
+            System.out.println(age);
+            System.out.println(year);
             ArrayList<Education> filteredData = jdbc.getFilteredData(age, gender, year);
             
             if (filteredData.size() > 0) {
