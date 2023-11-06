@@ -91,7 +91,7 @@ public class PageST3A implements Handler {
                 "    }\r\n" + //
                 "</script>\r\n" + //
                 "\r\n" ;
-
+                html += "<form action='page3A.html' method='post'>";
                 html += "<label for='ageFilter' class='block text-sm font-medium text-blue-500'>Select Age Range:</label>";
                 html += "<select name='ageFilter' id='ageFilter' class='block mt-1 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200 focus:border-indigo-300 sm:text-sm'>";
                 html += "<option value='Default' selected>Default</option>\r\n";
@@ -150,7 +150,7 @@ public class PageST3A implements Handler {
                 }
         // Close Content div
         html = html + "</div>";
-        if (context.formParams("ageFilter") != null && context.formParams("genderFilter") != null && context.formParams("year") != null ) {
+        if (context.formParam("ageFilter") != null && context.formParam("genderFilter") != null && context.formParam("year") != null ) {
             String age = context.formParam("ageFilter");
             String year = context.formParam("year");
             String gender = context.formParam("genderFilter");
